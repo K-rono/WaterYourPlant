@@ -101,7 +101,6 @@ fun PlantCareApp(
                     HomeScreen(
                         viewModel = homeViewModel,
                         nickname = "Eric the Plant",
-                        emotion = plantEmotion,
                         onHistoryClick = { navController.navigate(Screen.HISTORY.name) }
                     )
                 }

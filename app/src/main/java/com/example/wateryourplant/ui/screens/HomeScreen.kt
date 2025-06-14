@@ -52,13 +52,14 @@ import com.example.wateryourplant.ui.viewmodel.HomeViewModel
 fun HomeScreen(
     viewModel: HomeViewModel,
     nickname: String,
-    emotion: String,
     onHistoryClick: () -> Unit,
 ) {
     val plantUiState = RaspPiRepository.sensorDataFlow.collectAsState()
-    val isMoist = plantUiState.value.isMoist
+    val isMoist = plantUiState.value.moisture
     val temperatureLevel = plantUiState.value.temperatureLevel
 
+    val emotion =
+        if (plantUiState.value.moisture.equals("Dry")) "Dry" else if (plantUiState.value.temperatureLevel > 33f) "Hot" else if (plantUiState.value.temperatureLevel < 28f) "Cold" else "Happy"
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -108,7 +109,7 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Bottom
             ) {
                 // Placeholder for plant animation
-                FlowerAnimation(emotion)
+                FlowerAnimation(emotion = emotion)
                 Image(
                     painter = painterResource(id = R.drawable.flower),
                     contentDescription = "Plant Animation",
@@ -154,7 +155,7 @@ fun HomeScreen(
                         modifier = Modifier.size(100.dp)
                     ) {
                         GaugeProgressIndicator(
-                            progress = if(isMoist) 100f else 0f,
+                            progress = if (isMoist.equals("Moist")) 0f else 100f,
                             color = Color(0xFFBBDEFB),
                             trackColor = Color(0xFF2196F3),
                             modifier = Modifier.fillMaxSize()
@@ -174,7 +175,7 @@ fun HomeScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = if(isMoist)"Moist" else "Dry",
+                        text = if (isMoist.equals("Moist")) "Moist" else "Dry",
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFBBDEFB)
@@ -182,8 +183,8 @@ fun HomeScreen(
                 }
             }
 
-            val minTemp = 0f
-            val maxTemp = 50f
+            val minTemp = 5f
+            val maxTemp = 40f
             val clampedTemp = temperatureLevel.coerceIn(minTemp, maxTemp)
             val tempProgress = (clampedTemp - minTemp) / (maxTemp - minTemp)
 
@@ -279,7 +280,6 @@ fun HomeScreenPreview() {
     HomeScreen(
         viewModel(),
         nickname = "Eric the Plant",
-        emotion = "Happy",
         onHistoryClick = {}
     )
 }
