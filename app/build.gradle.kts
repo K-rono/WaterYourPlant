@@ -53,11 +53,14 @@ android {
 }
 
 dependencies {
-    implementation (libs.twitter4j.core)
-
+    //api requests
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson)
+    implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
     implementation(libs.signpost.core)
     implementation(libs.signpost.commonshttp4)
+    //implementation(libs.twitter4j.core)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

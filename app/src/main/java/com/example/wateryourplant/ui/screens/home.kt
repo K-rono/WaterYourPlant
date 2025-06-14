@@ -13,28 +13,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewModelScope
 import com.example.wateryourplant.ui.viewmodel.HomeViewModel
-import oauth.signpost.OAuthConsumer
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import org.apache.http.client.methods.HttpPost
-import java.net.URLEncoder
+import com.example.wateryourplant.util.showNotification
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun Home(
     viewModel: HomeViewModel
-){
+) {
     TweetScreen(viewModel = viewModel)
 }
 
 @Composable
 fun TweetScreen(viewModel: HomeViewModel) {
+    val context = LocalContext.current
     var tweetText by remember { mutableStateOf("") }
     var result by remember { mutableStateOf<String?>(null) }
+    val coroutineScope = viewModel.viewModelScope
 
     Column(modifier = Modifier.padding(16.dp)) {
         TextField(
@@ -44,7 +43,17 @@ fun TweetScreen(viewModel: HomeViewModel) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = {
-            viewModel.sendTweet(tweetText)
+            //viewModel.sendTweet(tweetText)
+            //viewModel.sendXTweet(tweetText)
+            coroutineScope.launch(Dispatchers.IO) {
+                if(viewModel.sendTelegram(tweetText)) {
+                    showNotification(
+                        context,
+                        "Water your plant!",
+                        "Look who's ignoring their plants again >:("
+                    )
+                }
+            }
         }) {
             Text("Tweet")
         }

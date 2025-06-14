@@ -21,11 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.wateryourplant.ui.viewmodel.HomeViewModel
 
 // Enum for navigation states
 enum class Screen {
@@ -45,6 +48,8 @@ fun PlantCareApp(
     var plantEmotion by remember { mutableStateOf("Happy") } // Happy, Thirsty, Hot, Cold, Healthy
     var moistureLevel by remember { mutableIntStateOf(65) } // Percentage
     var temperatureLevel by remember { mutableFloatStateOf(24.5f) } // Celsius
+
+    val homeViewModel: HomeViewModel = viewModel()
 
     Scaffold(
         bottomBar = {
@@ -94,10 +99,9 @@ fun PlantCareApp(
             ) {
                 composable(route = Screen.HOME.name) {
                     HomeScreen(
+                        viewModel = homeViewModel,
                         nickname = "Eric the Plant",
                         emotion = plantEmotion,
-                        moistureLevel = moistureLevel,
-                        temperatureLevel = temperatureLevel,
                         onHistoryClick = { navController.navigate(Screen.HISTORY.name) }
                     )
                 }

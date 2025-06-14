@@ -29,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,18 +41,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wateryourplant.R
 import com.example.wateryourplant.ui.components.FlowerAnimation
+import com.example.wateryourplant.data.repository.RaspPiRepository
+import com.example.wateryourplant.ui.viewmodel.HomeViewModel
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel,
     nickname: String,
     emotion: String,
-    moistureLevel: Int,
-    temperatureLevel: Float,
     onHistoryClick: () -> Unit,
 ) {
+    val plantUiState = RaspPiRepository.sensorDataFlow.collectAsState()
+    val isMoist = plantUiState.value.isMoist
+    val temperatureLevel = plantUiState.value.temperatureLevel
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -147,7 +154,7 @@ fun HomeScreen(
                         modifier = Modifier.size(100.dp)
                     ) {
                         GaugeProgressIndicator(
-                            progress = moistureLevel / 100f,
+                            progress = if(isMoist) 100f else 0f,
                             color = Color(0xFFBBDEFB),
                             trackColor = Color(0xFF2196F3),
                             modifier = Modifier.fillMaxSize()
@@ -167,7 +174,7 @@ fun HomeScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "$moistureLevel%",
+                        text = if(isMoist)"Moist" else "Dry",
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFBBDEFB)
@@ -270,10 +277,9 @@ fun GaugeProgressIndicator(
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
+        viewModel(),
         nickname = "Eric the Plant",
         emotion = "Happy",
-        moistureLevel = 50,
-        temperatureLevel = 30.5f,
         onHistoryClick = {}
     )
 }
