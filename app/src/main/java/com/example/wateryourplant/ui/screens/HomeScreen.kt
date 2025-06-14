@@ -41,10 +41,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wateryourplant.R
+import com.example.wateryourplant.ui.components.FlowerAnimation
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun HomeScreen(
+    nickname: String,
+    emotion: String,
     moistureLevel: Int,
     temperatureLevel: Float,
     onHistoryClick: () -> Unit,
@@ -98,13 +101,14 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Bottom
             ) {
                 // Placeholder for plant animation
+                FlowerAnimation(emotion)
                 Image(
-                    painter = painterResource(id = R.drawable.flowey_bg),
+                    painter = painterResource(id = R.drawable.flower),
                     contentDescription = "Plant Animation",
-                    modifier = Modifier.size(300.dp)
+                    modifier = Modifier.size(300.dp, 100.dp)
                 )
                 Text(
-                    text = "Plant Animation",
+                    text = nickname,
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
@@ -171,6 +175,11 @@ fun HomeScreen(
                 }
             }
 
+            val minTemp = 0f
+            val maxTemp = 50f
+            val clampedTemp = temperatureLevel.coerceIn(minTemp, maxTemp)
+            val tempProgress = (clampedTemp - minTemp) / (maxTemp - minTemp)
+
             // Temperature Level Card
             Card(
                 modifier = Modifier
@@ -193,7 +202,7 @@ fun HomeScreen(
                         modifier = Modifier.size(100.dp)
                     ) {
                         GaugeProgressIndicator(
-                            progress = moistureLevel / 100f,
+                            progress = tempProgress,
                             color = Color(0xFFF44336),
                             trackColor = Color(0xFFFFC4C4),
                             modifier = Modifier.fillMaxSize()
@@ -261,8 +270,10 @@ fun GaugeProgressIndicator(
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
-        moistureLevel = 13,
-        temperatureLevel = 12.5f,
+        nickname = "Eric the Plant",
+        emotion = "Happy",
+        moistureLevel = 50,
+        temperatureLevel = 30.5f,
         onHistoryClick = {}
     )
 }

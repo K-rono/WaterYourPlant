@@ -1,7 +1,5 @@
 package com.example.wateryourplant.ui.screens
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -16,13 +14,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,19 +37,14 @@ enum class Screen {
 fun PlantCareApp(
     navController: NavHostController = rememberNavController(),
 ) {
-    val config = LocalConfiguration.current
-    val screenWidth = config.screenWidthDp.dp
-    val screenHeight = config.screenHeightDp.dp
-
     // State to manage current screen
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     // Mock data for demonstration
-    var plantNickname by remember { mutableStateOf("My Lovely Plant") }
     var plantEmotion by remember { mutableStateOf("Happy") } // Happy, Thirsty, Hot, Cold, Healthy
-    var moistureLevel by remember { mutableStateOf(65) } // Percentage
-    var temperatureLevel by remember { mutableStateOf(24.5f) } // Celsius
+    var moistureLevel by remember { mutableIntStateOf(65) } // Percentage
+    var temperatureLevel by remember { mutableFloatStateOf(24.5f) } // Celsius
 
     Scaffold(
         bottomBar = {
@@ -97,34 +90,12 @@ fun PlantCareApp(
             NavHost(
                 navController = navController,
                 startDestination = Screen.HOME.name,
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(700)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(700)
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(700)
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(700)
-                    )
-                },
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = Screen.HOME.name) {
                     HomeScreen(
+                        nickname = "Eric the Plant",
+                        emotion = plantEmotion,
                         moistureLevel = moistureLevel,
                         temperatureLevel = temperatureLevel,
                         onHistoryClick = { navController.navigate(Screen.HISTORY.name) }
