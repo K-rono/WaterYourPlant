@@ -75,7 +75,7 @@ class PlantMonitorService : Service() {
                 if (!isSecondTime) "You are neglecting your plant! >:(" else "You shall face judgement by the SubReddit now!"
             showNotification(this, title, message)
             if (isSecondTime) {
-                PostingService.sendTelegram("Could you please give me some water mate - by your beloved and dried up plant.")
+                //PostingService.sendTelegram("Could you please give me some water mate - by your beloved and dried up plant.")
                 //PostingService.sendReddit("")
                 isRedditPosted = true
                 lastDryNoti = System.currentTimeMillis()
@@ -97,7 +97,7 @@ class PlantMonitorService : Service() {
                 "Mate, do you think I'm hot?",
                 "Yeah, DO YOU SEE THE TEMPS? I'M GETTING COOKED ALIVE"
             )
-            PostingService.sendTelegram("Can someone please turn on the air conditioner?")
+            //PostingService.sendTelegram("Can someone please turn on the air conditioner?")
             lastHotNoti = System.currentTimeMillis()
             isFirstTimeHot = false
             lastComfyNoti = 0L
@@ -107,7 +107,7 @@ class PlantMonitorService : Service() {
                 "I'm as cold as your crushes' eyes when you got rejected",
                 "Seriously, are we living in the north pole?"
             )
-            PostingService.sendTelegram("Can someone please turn OFF the air conditioner?")
+            //PostingService.sendTelegram("Can someone please turn OFF the air conditioner?")
             lastColdNoti = System.currentTimeMillis()
             isFirstTimeCold = false
             lastComfyNoti = 0L
