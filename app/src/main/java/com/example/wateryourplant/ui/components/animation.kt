@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.wateryourplant.R
 import kotlinx.coroutines.delay
 
@@ -55,7 +56,7 @@ private fun FlowerDefaultAnimation(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(id = frames[currentFrame]),
             contentDescription = "Default Animation",
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().zIndex(0f)
         )
     }
 }
@@ -89,7 +90,7 @@ private fun FlowerColdAnimation(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(id = frames[currentFrame]),
             contentDescription = "Cold Animation",
-            modifier = Modifier.size(300.dp).offset{ IntOffset(offset,0) }
+            modifier = Modifier.size(300.dp).offset{ IntOffset(offset,0) }.zIndex(0f)
         )
     }
 }
@@ -123,7 +124,7 @@ private fun FlowerHotAnimation(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(id = frames[currentFrame]),
             contentDescription = "Hot Animation",
-            modifier = Modifier.size(300.dp).offset{ IntOffset(if(currentFrame == 1) offset else 0,0) }
+            modifier = Modifier.size(300.dp).offset{ IntOffset(if(currentFrame == 1) offset else 0,0) }.zIndex(0f)
         )
     }
 }
@@ -164,7 +165,7 @@ private fun FlowerDryAnimation(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(id = frames[currentFrame]),
             contentDescription = "Dry Animation",
-            modifier = Modifier.size(300.dp).offset{ IntOffset(if(currentFrame==1)offset else offset2, 0) }
+            modifier = Modifier.size(300.dp).offset{ IntOffset(if(currentFrame==1)offset else offset2, 0) }.zIndex(0f)
         )
     }
 }

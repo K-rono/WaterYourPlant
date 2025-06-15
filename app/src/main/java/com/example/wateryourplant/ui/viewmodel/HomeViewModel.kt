@@ -25,18 +25,24 @@ class HomeViewModel : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState = _homeUiState.asStateFlow()
 
+    private var isScreenVisible = false
+
     init {
-        displayResponse("Hi")
+        displayResponse("I AM DRY AS HELL MATE")
+    }
+
+    fun onScreenEntered() {
+        isScreenVisible = true
     }
 
     // ------ Pet response ---------
-    private fun displayResponse(message: String) {
+    fun displayResponse(message: String) {
         viewModelScope.launch {
-            if (_homeUiState.value.isDialogVisible) {
-                while (_homeUiState.value.isDialogVisible) {
-                    delay(100)
-                }
-            }
+//            if (_homeUiState.value.isDialogVisible) {
+//                while (_homeUiState.value.isDialogVisible) {
+//                    delay(100)
+//                }
+//            }
             withContext(Dispatchers.Main) {
                 _homeUiState.update {
                     it.copy(
@@ -44,10 +50,11 @@ class HomeViewModel : ViewModel() {
                         isDialogVisible = true
                     )
                 }
-            }
-//            delay(5000)
-            withContext(Dispatchers.Main) {
+                delay(3000)
                 _homeUiState.update { it.copy(isDialogVisible = false) }
+            }
+            withContext(Dispatchers.Main) {
+
             }
         }
     }

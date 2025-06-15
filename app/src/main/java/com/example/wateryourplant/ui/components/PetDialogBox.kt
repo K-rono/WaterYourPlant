@@ -1,5 +1,6 @@
 package com.example.wateryourplant.ui.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
@@ -40,7 +41,8 @@ fun DialogBox(
     isDialogVisible: Boolean,
     onDismiss: () -> Unit,
 ) {
-    val transitionState = remember { MutableTransitionState(false) }
+    Log.i("triggered","triggered")
+    val transitionState = remember { MutableTransitionState(true) }
 
     LaunchedEffect(isDialogVisible) {
         transitionState.targetState = isDialogVisible
@@ -55,20 +57,20 @@ fun DialogBox(
             ) + fadeIn(),
             exit = slideOutVertically(
                 animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
-                targetOffsetY = { it / 3 } // Slide out to the bottom
+                targetOffsetY = { -(it / 6) } // Slide out to the bottom
             )
         ) {
             Box(
                 modifier = Modifier
-                    .offset(x = screenWidth * 0.04F, y = screenHeight * 0.82F)
-                    .size(width = screenWidth * 0.92F, height = screenHeight * 0.15F)
+                    .offset(x = screenWidth * 0.04F, y = screenHeight * 0.05F)
+                    .size(width = screenWidth * 0.92F, height = screenHeight * 0.1F)
                     .shadow(elevation = 32.dp, shape = RoundedCornerShape(20.dp))
                     .background(color = Color.White.copy(alpha = 0.9f))
                     .border(
                         border = BorderStroke(2.dp, Color.LightGray),
                         shape = RoundedCornerShape(20.dp)
                     )
-                    .zIndex(1F)
+                    .zIndex(2F)
                     .clickable {
                         if (isDialogVisible) {
                             onDismiss()

@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -45,6 +46,10 @@ import com.example.wateryourplant.R
 import com.example.wateryourplant.ui.components.FlowerAnimation
 import com.example.wateryourplant.ui.components.DialogBox
 import com.example.wateryourplant.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("DefaultLocale")
 @Composable
@@ -52,13 +57,33 @@ fun HomeScreen(
     isMoist: String,
     tempLevel: Float,
     emotion: String,
-    nickname: String
+    nickname: String,
+    onScreenVisible: () -> Unit,
+    homeViewModel: HomeViewModel
 ) {
+    val config = LocalConfiguration.current
+    val screenWidth = config.screenWidthDp.dp
+    val screenHeight = config.screenHeightDp.dp
+    val homeUiState by homeViewModel.homeUiState.collectAsState()
+    val coroutineScope : CoroutineScope = CoroutineScope(Dispatchers.IO)
+    val isFirstTimeDry = true
+
+    DisposableEffect(Unit) {
+        onScreenVisible() // Notify the ViewModel when the screen is active
+        onDispose {}
+    }
+
+    if(isMoist == "Dry" && isFirstTimeDry){
+
+    }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black),
-    ) {
+    )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -66,6 +91,7 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,13 +101,16 @@ fun HomeScreen(
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.Black)
             ) {
+
+
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Placeholder for plant animation
-                    Spacer(modifier = Modifier.height(55.dp))
+                    Spacer(modifier = Modifier.height(70.dp))
                     FlowerAnimation(emotion = emotion)
                     Image(
                         painter = painterResource(id = R.drawable.flower),
@@ -213,8 +242,15 @@ fun HomeScreen(
                 }
             }
         }
+
+    DialogBox(
+        screenWidth = screenWidth,
+        screenHeight = screenHeight,
+        dialogMessage = homeUiState.dialogMessage,
+        isDialogVisible = homeUiState.isDialogVisible,
+        onDismiss = { homeViewModel.onDialogDismissed() }
+    )
     }
-}
 
 @Composable
 fun GaugeProgressIndicator(
@@ -252,10 +288,10 @@ fun GaugeProgressIndicator(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(
-        isMoist = "Moist",
-        tempLevel = 24.5f,
-        emotion = "Cold",
-        nickname = "Eric the Plant"
-    )
+//    HomeScreen(
+//        isMoist = "Moist",
+//        tempLevel = 24.5f,
+//        emotion = "Cold",
+//        nickname = "Eric the Plant"
+//    )
 }

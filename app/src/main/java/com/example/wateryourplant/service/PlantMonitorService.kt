@@ -74,7 +74,6 @@ class PlantMonitorService : Service() {
             val message =
                 if (!isSecondTime) "You are neglecting your plant! >:(" else "You shall face judgement by the SubReddit now!"
             showNotification(this, title, message)
-
             if (isSecondTime) {
                 PostingService.sendTelegram("Could you please give me some water mate - by your beloved and dried up plant.")
                 //PostingService.sendReddit("")
