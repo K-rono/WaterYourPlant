@@ -53,6 +53,12 @@ val titles = titleToReminder.keys.toList()
 fun WaterReminderHistoryScreen(
     onBackClick: () -> Unit
 ) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()

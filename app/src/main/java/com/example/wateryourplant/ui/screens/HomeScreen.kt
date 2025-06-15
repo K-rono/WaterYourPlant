@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,17 +18,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,25 +36,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wateryourplant.R
 import com.example.wateryourplant.ui.components.FlowerAnimation
-import com.example.wateryourplant.data.repository.RaspPiRepository
-import com.example.wateryourplant.ui.viewmodel.HomeViewModel
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel,
-    nickname: String,
-    onHistoryClick: () -> Unit,
+    isMoist: String,
+    tempLevel: Float,
+    emotion: String,
+    nickname: String
 ) {
-    val plantUiState = RaspPiRepository.sensorDataFlow.collectAsState()
-    val isMoist = plantUiState.value.moisture
-    val temperatureLevel = plantUiState.value.temperatureLevel
-
-    val emotion =
-        if (plantUiState.value.moisture.equals("Dry")) "Dry" else if (plantUiState.value.temperatureLevel > 33f) "Hot" else if (plantUiState.value.temperatureLevel < 28f) "Cold" else "Happy"
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -73,51 +60,30 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        // reminder history
-        Button(
-            onClick = onHistoryClick,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-                .size(40.dp)
-                .align(Alignment.End),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE6CFFF).copy(alpha = 0.7f)),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Email,
-                contentDescription = "History",
-                tint = Color.Black,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.7f)
-                .padding(bottom = 16.dp),
+                .weight(0.65f)
+                .padding(top = 20.dp, bottom = 20.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             colors = CardDefaults.cardColors(containerColor = Color.Black)
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Placeholder for plant animation
                 FlowerAnimation(emotion = emotion)
                 Image(
                     painter = painterResource(id = R.drawable.flower),
                     contentDescription = "Plant Animation",
-                    modifier = Modifier.size(300.dp, 100.dp)
+                    modifier = Modifier.size(250.dp, 80.dp)
                 )
                 Text(
                     text = nickname,
-                    fontSize = 36.sp,
+                    fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -129,7 +95,8 @@ fun HomeScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.3f),
+                .weight(0.3f)
+                .padding(bottom = 20.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.Bottom
         ) {
@@ -185,7 +152,7 @@ fun HomeScreen(
 
             val minTemp = 5f
             val maxTemp = 40f
-            val clampedTemp = temperatureLevel.coerceIn(minTemp, maxTemp)
+            val clampedTemp = tempLevel.coerceIn(minTemp, maxTemp)
             val tempProgress = (clampedTemp - minTemp) / (maxTemp - minTemp)
 
             // Temperature Level Card
@@ -225,12 +192,12 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Temperature Level",
-                        fontSize = 16.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = String.format("%.1f°C", temperatureLevel),
+                        text = String.format("%.1f°C", tempLevel),
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFFFC4C4)
@@ -278,8 +245,9 @@ fun GaugeProgressIndicator(
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
-        viewModel(),
-        nickname = "Eric the Plant",
-        onHistoryClick = {}
+        isMoist = "Moist",
+        tempLevel = 24.5f,
+        emotion = "Happy",
+        nickname = "Eric the Plant"
     )
 }

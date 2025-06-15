@@ -54,7 +54,7 @@ private fun FlowerDefaultAnimation(modifier: Modifier = Modifier){
     ) {
         Image(
             painter = painterResource(id = frames[currentFrame]),
-            contentDescription = "Potato Flying Animation",
+            contentDescription = "Default Animation",
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -88,7 +88,7 @@ private fun FlowerColdAnimation(modifier: Modifier = Modifier){
     ) {
         Image(
             painter = painterResource(id = frames[currentFrame]),
-            contentDescription = "Potato Flying Animation",
+            contentDescription = "Cold Animation",
             modifier = Modifier.size(230.dp).offset{ IntOffset(offset,0) }
         )
     }
@@ -122,7 +122,7 @@ private fun FlowerHotAnimation(modifier: Modifier = Modifier){
     ) {
         Image(
             painter = painterResource(id = frames[currentFrame]),
-            contentDescription = "Potato Flying Animation",
+            contentDescription = "Hot Animation",
             modifier = Modifier.size(230.dp).offset{ IntOffset(if(currentFrame == 1) offset else 0,0) }
         )
     }
@@ -163,7 +163,7 @@ private fun FlowerDryAnimation(modifier: Modifier = Modifier){
     ) {
         Image(
             painter = painterResource(id = frames[currentFrame]),
-            contentDescription = "Potato Flying Animation",
+            contentDescription = "Dry Animation",
             modifier = Modifier.size(230.dp).offset{ IntOffset(if(currentFrame==1)offset else offset2, 0) }
         )
     }
