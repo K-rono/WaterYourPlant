@@ -12,7 +12,7 @@ fun PlantCareApp() {
     val temperatureLevel = plantUiState.value.temperatureLevel
 
     val emotion =
-        if (plantUiState.value.moisture.equals("Dry")) "Dry"
+        if (plantUiState.value.moisture == "Dry") "Dry"
         else if (plantUiState.value.temperatureLevel > 33f) "Hot"
         else if (plantUiState.value.temperatureLevel < 28f) "Cold"
         else "Happy"

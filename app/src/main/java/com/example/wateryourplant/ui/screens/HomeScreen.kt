@@ -122,7 +122,7 @@ fun HomeScreen(
                         modifier = Modifier.size(100.dp)
                     ) {
                         GaugeProgressIndicator(
-                            progress = if (isMoist.equals("Moist")) 0f else 100f,
+                            progress = if (isMoist == "Moist") 0f else 100f,
                             color = Color(0xFFBBDEFB),
                             trackColor = Color(0xFF2196F3),
                             modifier = Modifier.fillMaxSize()
@@ -142,7 +142,7 @@ fun HomeScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = if (isMoist.equals("Moist")) "Moist" else "Dry",
+                        text = if (isMoist == "Moist") "Moist" else "Dry",
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFBBDEFB)

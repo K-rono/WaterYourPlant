@@ -2,7 +2,6 @@ package com.example.wateryourplant
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 
 import android.os.Bundle
@@ -13,7 +12,6 @@ import androidx.core.content.ContextCompat
 import com.example.wateryourplant.service.PlantMonitorService
 import com.example.wateryourplant.ui.screens.PlantCareApp
 import com.example.wateryourplant.ui.theme.WaterYourPlantTheme
-import com.example.wateryourplant.util.createNotification
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +25,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WaterYourPlantTheme {
-                //WaterYourPlant()
                 PlantCareApp()
             }
         }
