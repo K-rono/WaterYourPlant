@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 object RaspPiRepository {
-    private val _sensorDataFlow = MutableStateFlow(PlantUiState("Moist", 0f))
+    private val _sensorDataFlow = MutableStateFlow(PlantUiState("None", 0f))
     val sensorDataFlow = _sensorDataFlow.asStateFlow()
 
     fun updateData(moisture: String, temp: Float) {

@@ -76,11 +76,11 @@ class PlantMonitorService : Service() {
             showNotification(this, title, message)
 
             if (isSecondTime) {
-                //PostingService.sendTelegram("Could you please give me some water mate - by your beloved and dried up plant.")
-
+                PostingService.sendTelegram("Could you please give me some water mate - by your beloved and dried up plant.")
                 //PostingService.sendReddit("")
                 isRedditPosted = true
                 lastDryNoti = System.currentTimeMillis()
+
             } else {
                 isSecondTime = true
             }
@@ -89,6 +89,7 @@ class PlantMonitorService : Service() {
             showNotification(this, "AHH, SWEET H20", "I almost forgot how water taste like.")
             lastDryNoti = 0L
             isSecondTime = false
+            isRedditPosted = false
         }
 
         if (temperature > 33f && isFirstTimeHot) {
@@ -100,6 +101,7 @@ class PlantMonitorService : Service() {
             PostingService.sendTelegram("Can someone please turn on the air conditioner?")
             lastHotNoti = System.currentTimeMillis()
             isFirstTimeHot = false
+            lastComfyNoti = 0L
         } else if (temperature < 28f && isFirstTimeCold) {
             showNotification(
                 this,
@@ -109,6 +111,7 @@ class PlantMonitorService : Service() {
             PostingService.sendTelegram("Can someone please turn OFF the air conditioner?")
             lastColdNoti = System.currentTimeMillis()
             isFirstTimeCold = false
+            lastComfyNoti = 0L
         } else if (temperature in 28f..33f && lastComfyNoti == 0L && (lastColdNoti > 0 || lastHotNoti >0)) {
             showNotification(
                 this,
@@ -116,6 +119,10 @@ class PlantMonitorService : Service() {
                 "Ain't the weather beautiful today mate, I'm feeling extra comfy now"
             )
             lastComfyNoti = System.currentTimeMillis()
+            lastHotNoti = 0L
+            lastColdNoti = 0L
+            isFirstTimeHot = true
+            isFirstTimeCold = true
         }
         // Use Retrofit to call Flask API
         // If temperature/humidity meet conditions:
