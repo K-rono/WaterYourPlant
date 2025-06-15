@@ -19,8 +19,8 @@ object PostingService {
 
         val requestBody = FormBody.Builder()
             .add("grant_type", "password")
-            .add("username", "traalalelotralala")
-            .add("password", "limqihong_567")
+            .add("username", "XXX")
+            .add("password", "XXX")
             .build()
 
         val credential =
@@ -89,7 +89,7 @@ object PostingService {
     suspend fun sendTelegram(status: String): Boolean {
         return try {
             val response = TelegramService.api.sendMessage(
-                chatId = "1249305211",
+                chatId = "XXX",
                 message = status
             )
             if (response.isSuccessful) {
