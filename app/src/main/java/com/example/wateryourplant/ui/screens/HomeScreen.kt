@@ -75,6 +75,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Placeholder for plant animation
+                Spacer(modifier = Modifier.height(55.dp))
                 FlowerAnimation(emotion = emotion)
                 Image(
                     painter = painterResource(id = R.drawable.flower),
@@ -247,7 +248,7 @@ fun HomeScreenPreview() {
     HomeScreen(
         isMoist = "Moist",
         tempLevel = 24.5f,
-        emotion = "Happy",
+        emotion = "Cold",
         nickname = "Eric the Plant"
     )
 }

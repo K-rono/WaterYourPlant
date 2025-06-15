@@ -63,9 +63,9 @@ private fun FlowerDefaultAnimation(modifier: Modifier = Modifier){
 @Composable
 private fun FlowerColdAnimation(modifier: Modifier = Modifier){
     val frames = listOf(
-        R.drawable.cold1,
-        R.drawable.cold1,
-        R.drawable.cold1
+        R.drawable.cold,
+        R.drawable.cold,
+        R.drawable.cold
     )
     val offset by produceState(0) {
         while (true){
@@ -89,7 +89,7 @@ private fun FlowerColdAnimation(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(id = frames[currentFrame]),
             contentDescription = "Cold Animation",
-            modifier = Modifier.size(230.dp).offset{ IntOffset(offset,0) }
+            modifier = Modifier.size(300.dp).offset{ IntOffset(offset,0) }
         )
     }
 }
@@ -97,8 +97,8 @@ private fun FlowerColdAnimation(modifier: Modifier = Modifier){
 @Composable
 private fun FlowerHotAnimation(modifier: Modifier = Modifier){
     val frames = listOf(
-        R.drawable.hot1,
-        R.drawable.hot2,
+        R.drawable.hot_1,
+        R.drawable.hot_2,
     )
 
     val offset by produceState(0) {
@@ -123,7 +123,7 @@ private fun FlowerHotAnimation(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(id = frames[currentFrame]),
             contentDescription = "Hot Animation",
-            modifier = Modifier.size(230.dp).offset{ IntOffset(if(currentFrame == 1) offset else 0,0) }
+            modifier = Modifier.size(300.dp).offset{ IntOffset(if(currentFrame == 1) offset else 0,0) }
         )
     }
 }
@@ -131,8 +131,8 @@ private fun FlowerHotAnimation(modifier: Modifier = Modifier){
 @Composable
 private fun FlowerDryAnimation(modifier: Modifier = Modifier){
     val frames = listOf(
-        R.drawable.dry1,
-        R.drawable.dry2,
+        R.drawable.dry_1,
+        R.drawable.dry_2,
     )
     val offset by produceState(0) {
         while (true){
@@ -164,7 +164,7 @@ private fun FlowerDryAnimation(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(id = frames[currentFrame]),
             contentDescription = "Dry Animation",
-            modifier = Modifier.size(230.dp).offset{ IntOffset(if(currentFrame==1)offset else offset2, 0) }
+            modifier = Modifier.size(300.dp).offset{ IntOffset(if(currentFrame==1)offset else offset2, 0) }
         )
     }
 }
