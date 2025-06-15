@@ -25,19 +25,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wateryourplant.R
 import com.example.wateryourplant.ui.components.FlowerAnimation
+import com.example.wateryourplant.ui.components.DialogBox
+import com.example.wateryourplant.ui.viewmodel.HomeViewModel
 
 @SuppressLint("DefaultLocale")
 @Composable
@@ -51,158 +58,158 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black),
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        Card(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.65f)
-                .padding(top = 20.dp, bottom = 20.dp),
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.Black)
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Placeholder for plant animation
-                Spacer(modifier = Modifier.height(55.dp))
-                FlowerAnimation(emotion = emotion)
-                Image(
-                    painter = painterResource(id = R.drawable.flower),
-                    contentDescription = "Plant Animation",
-                    modifier = Modifier.size(250.dp, 80.dp)
-                )
-                Text(
-                    text = nickname,
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-            }
-        }
-
-        // Moisture and Temperature Levels (side-by-side)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.3f)
-                .padding(bottom = 20.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.Bottom
-        ) {
-            // Moisture Level Card
             Card(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .padding(end = 8.dp),
+                    .fillMaxWidth()
+                    .weight(0.65f)
+                    .padding(top = 20.dp, bottom = 20.dp),
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFE6CFFF).copy(alpha = 0.7f))
+                colors = CardDefaults.cardColors(containerColor = Color.Black)
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.size(100.dp)
-                    ) {
-                        GaugeProgressIndicator(
-                            progress = if (isMoist == "Moist") 0f else 100f,
-                            color = Color(0xFFBBDEFB),
-                            trackColor = Color(0xFF2196F3),
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        Icon(
-                            imageVector = Icons.Default.AddCircle,
-                            contentDescription = "Moisture",
-                            tint = Color(0xFFBBDEFB),
-                            modifier = Modifier.size(40.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Moisture Level",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                    // Placeholder for plant animation
+                    Spacer(modifier = Modifier.height(55.dp))
+                    FlowerAnimation(emotion = emotion)
+                    Image(
+                        painter = painterResource(id = R.drawable.flower),
+                        contentDescription = "Plant Animation",
+                        modifier = Modifier.size(250.dp, 80.dp)
                     )
                     Text(
-                        text = if (isMoist == "Moist") "Moist" else "Dry",
+                        text = nickname,
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFBBDEFB)
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(bottom = 16.dp)
                     )
                 }
             }
 
-            val minTemp = 5f
-            val maxTemp = 40f
-            val clampedTemp = tempLevel.coerceIn(minTemp, maxTemp)
-            val tempProgress = (clampedTemp - minTemp) / (maxTemp - minTemp)
-
-            // Temperature Level Card
-            Card(
+            // Moisture and Temperature Levels (side-by-side)
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .padding(start = 8.dp),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFE6CFFF).copy(alpha = 0.7f))
+                    .fillMaxWidth()
+                    .weight(0.3f)
+                    .padding(bottom = 20.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.Bottom
             ) {
-                Column(
+                // Moisture Level Card
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(end = 8.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFE6CFFF).copy(alpha = 0.7f))
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.size(100.dp)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        GaugeProgressIndicator(
-                            progress = tempProgress,
-                            color = Color(0xFFF44336),
-                            trackColor = Color(0xFFFFC4C4),
-                            modifier = Modifier.fillMaxSize()
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.size(100.dp)
+                        ) {
+                            GaugeProgressIndicator(
+                                progress = if (isMoist == "Moist") 0f else 100f,
+                                color = Color(0xFFBBDEFB),
+                                trackColor = Color(0xFF2196F3),
+                                modifier = Modifier.fillMaxSize()
+                            )
+                            Icon(
+                                imageVector = Icons.Default.AddCircle,
+                                contentDescription = "Moisture",
+                                tint = Color(0xFFBBDEFB),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Moisture Level",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = "Temperature",
-                            tint = Color(0xFFF44336),
-                            modifier = Modifier.size(48.dp)
+                        Text(
+                            text = if (isMoist == "Moist") "Moist" else "Dry",
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFBBDEFB)
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Temperature Level",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = String.format("%.1f°C", tempLevel),
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFFC4C4)
-                    )
+                }
+
+                val minTemp = 5f
+                val maxTemp = 40f
+                val clampedTemp = tempLevel.coerceIn(minTemp, maxTemp)
+                val tempProgress = (clampedTemp - minTemp) / (maxTemp - minTemp)
+
+                // Temperature Level Card
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(start = 8.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFE6CFFF).copy(alpha = 0.7f))
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.size(100.dp)
+                        ) {
+                            GaugeProgressIndicator(
+                                progress = tempProgress,
+                                color = Color(0xFFF44336),
+                                trackColor = Color(0xFFFFC4C4),
+                                modifier = Modifier.fillMaxSize()
+                            )
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Temperature",
+                                tint = Color(0xFFF44336),
+                                modifier = Modifier.size(48.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Temperature Level",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = String.format("%.1f°C", tempLevel),
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFFFC4C4)
+                        )
+                    }
                 }
             }
         }
